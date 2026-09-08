@@ -1148,23 +1148,29 @@ void ColladaExporter::WriteGeometry(size_t pIndex) {
 
     // polygons
     if (countPoly) {
+        int cnt = 1;
         mOutput << startstr << "<polylist count=\"" << countPoly << "\" material=\"defaultMaterial\">" << endstr;
         PushTag();
         mOutput << startstr << "<input offset=\"0\" semantic=\"VERTEX\" source=\"#" << geometryId << "-vertices\" />" << endstr;
         if (mesh->HasNormals()) {
-            mOutput << startstr << "<input offset=\"0\" semantic=\"NORMAL\" source=\"#" << geometryId << "-normals\" />" << endstr;
+            mOutput << startstr << "<input offset=\"" << cnt << "\" semantic=\"NORMAL\" source=\"#" << geometryId << "-normals\" />" << endstr;
+            cnt++;
         }
         for (size_t a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++a) {
-            if (mesh->HasTextureCoords(static_cast<unsigned int>(a)))
-                mOutput << startstr << "<input offset=\"0\" semantic=\"TEXCOORD\" source=\"#" << geometryId << "-tex" << a << "\" "
+            if (mesh->HasTextureCoords(static_cast<unsigned int>(a))) {
+                mOutput << startstr << "<input offset=\"" << cnt << "\" semantic=\"TEXCOORD\" source=\"#" << geometryId << "-tex" << a << "\" "
                         << "set=\"" << a << "\""
                         << " />" << endstr;
+                cnt++;
+            }
         }
         for (size_t a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; ++a) {
-            if (mesh->HasVertexColors(static_cast<unsigned int>(a)))
-                mOutput << startstr << "<input offset=\"0\" semantic=\"COLOR\" source=\"#" << geometryId << "-color" << a << "\" "
+            if (mesh->HasVertexColors(static_cast<unsigned int>(a))) {
+                mOutput << startstr << "<input offset=\"" << cnt << "\" semantic=\"COLOR\" source=\"#" << geometryId << "-color" << a << "\" "
                         << "set=\"" << a << "\""
                         << " />" << endstr;
+                cnt++;
+            }
         }
 
         mOutput << startstr << "<vcount>";
@@ -1179,7 +1185,9 @@ void ColladaExporter::WriteGeometry(size_t pIndex) {
             const aiFace &face = mesh->mFaces[a];
             if (face.mNumIndices < 3) continue;
             for (size_t b = 0; b < face.mNumIndices; ++b) {
-                mOutput << face.mIndices[b] << " ";
+                for (int c = 0; c < cnt; c++) {
+                    mOutput << face.mIndices[b] << " ";
+                }
             }
         }
         mOutput << "</p>" << endstr;
