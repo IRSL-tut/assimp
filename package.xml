@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>assimp</name>
+  <version>0.0.0</version>
+  <description>Assimp(package.xml for building with catkin/colcon</description>
+  <maintainer email="kakiuchi.yohei.sw@tut.jp">Yohei Kakiuchi (just this package.xml) </maintainer>
+  <license>BSD-3-Clause</license>
+  <author email="kakiuchi.yohei.sw@tut.jp">Yohei Kakiuchi (just this package.xml) </author>
+  <!--url type="website"></url-->
+  <url type="repository">https://github.com/assimp/assimp</url>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
